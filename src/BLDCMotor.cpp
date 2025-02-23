@@ -502,7 +502,7 @@ void BLDCMotor::setPhaseVoltage(float Uq, float Ud, float angle_el) {
   float _ca,_sa;
 
   switch (foc_modulation)
-  {
+  { 
     case FOCModulationType::Trapezoid_120 :
       // see https://www.youtube.com/watch?v=InzXA7mWBWE Slide 5
       // determine the sector

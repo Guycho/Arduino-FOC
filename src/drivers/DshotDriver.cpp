@@ -49,8 +49,8 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
 }
 
 void DshotDriver::sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3) {
-    motor->sendThrottleValue(command1);
-    motor->sendThrottleValue(command2);
-    motor->sendThrottleValue(command3);
+    motor->sendThrottleValue(50 + command1);
+    motor->sendThrottleValue(700 + command2);
+    motor->sendThrottleValue(1350 + command3);
     // Dshot command sending
 }

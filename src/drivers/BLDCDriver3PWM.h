@@ -27,7 +27,7 @@ class BLDCDriver3PWM: public BLDCDriver
     /**  Motor hardware init function */
   	int init() override;
     /** Motor disable function */
-  	void disable() override;
+    void disable() override;
     /** Motor enable function */
     void enable() override;
 
@@ -39,13 +39,13 @@ class BLDCDriver3PWM: public BLDCDriver
     int enableB_pin; //!< enable pin number
     int enableC_pin; //!< enable pin number
 
-    /** 
-     * Set phase voltages to the hardware 
-     * 
+    /**
+     * Set phase voltages to the hardware
+     *
      * @param Ua - phase A voltage
      * @param Ub - phase B voltage
      * @param Uc - phase C voltage
-    */
+     */
     void setPwm(float Ua, float Ub, float Uc) override;
 
     /** 
