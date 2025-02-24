@@ -43,14 +43,14 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
     dc_b = _constrain(Ub / voltage_power_supply, 0.0f, 1.0f);
     dc_c = _constrain(Uc / voltage_power_supply, 0.0f, 1.0f);
 
-    uint16_t scaled_dc_a = dc_a * 650;
-    uint16_t scaled_dc_b = dc_b * 650;
-    uint16_t scaled_dc_c = dc_c * 650;
+    uint16_t scaled_dc_a = dc_a * 663;
+    uint16_t scaled_dc_b = dc_b * 663;
+    uint16_t scaled_dc_c = dc_c * 663;
 }
 
 void DshotDriver::sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3) {
     motor->sendThrottleValue(50 + command1);
-    motor->sendThrottleValue(700 + command2);
-    motor->sendThrottleValue(1350 + command3);
+    motor->sendThrottleValue(50 + 664 + command2);
+    motor->sendThrottleValue(50 + 664 + 664 +command3);
     // Dshot command sending
 }
