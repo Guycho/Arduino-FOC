@@ -21,7 +21,7 @@ void DshotDriver::disable() {
 
 // init hardware pins
 int DshotDriver::init() {
-    DShotRMT motor new DShotRMT(m_dshot_pin, m_rmt_channel);
+    DShotRMT motor = new DShotRMT(m_dshot_pin, m_rmt_channel);
     motor.begin(DSHOT_MODE);
     return 1;
 }
