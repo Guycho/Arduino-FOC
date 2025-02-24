@@ -22,7 +22,7 @@ class DshotDriver : public BLDCDriver {
      * @param en2 enable pin (optional input)
      * @param en3 enable pin (optional input)
      */
-    DshotDriver(int dshot_pin);
+    DshotDriver(uint8_t dshot_pin, uint8_t rmt_channel);
 
     /** Motor hardware init function */
     int init() override;
