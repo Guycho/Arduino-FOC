@@ -52,7 +52,7 @@ class DshotDriver : public BLDCDriver {
 
    private:
     DShotRMT *motor;
-    const auto DSHOT_MODE = DSHOT300;
+    const dshot_mode_e DSHOT_MODE = DSHOT300;
     uint8_t m_dshot_pin;    //!< DShot pin number
     uint8_t m_rmt_channel;  //!< RMT channel number
     void sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3);
