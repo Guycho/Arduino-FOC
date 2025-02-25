@@ -16,7 +16,7 @@ void DshotDriver::disable() { setPwm(0, 0, 0); }
 
 // init hardware pins
 int DshotDriver::init() {
-    m_motor = new DShotRMT(m_dshot_pin, m_rmt_channel);
+    m_motor = new DShotRMT(m_dshot_pin);
     m_motor->begin(DSHOT_MODE);
     long unsigned int now = micros();
     long unsigned int last = millis();
