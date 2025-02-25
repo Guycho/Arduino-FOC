@@ -1,8 +1,7 @@
 #include "DshotDriver.h"
 
-DshotDriver::DshotDriver(uint8_t dshot_pin, uint8_t rmt_channel) {
+DshotDriver::DshotDriver(uint8_t dshot_pin) {
     m_dshot_pin = dshot_pin;
-    m_rmt_channel = rmt_channel;
     // default power-supply value
     voltage_power_supply = DEF_POWER_SUPPLY;
     voltage_limit = NOT_SET;
@@ -23,7 +22,7 @@ int DshotDriver::init() {
     long unsigned int last = millis();
     while (true) {
         if (micros() - last > 1000 / 300) {
-            motor->send_dshot_value(0);
+            m_motor->send_dshot_value(0);
         }
         if (millis() - now > 2000) {
             break;
