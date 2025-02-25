@@ -22,7 +22,7 @@ class DshotDriver : public BLDCDriver {
      * @param en2 enable pin (optional input)
      * @param en3 enable pin (optional input)
      */
-    DshotDriver(uint8_t dshot_pin, uint8_t rmt_channel);
+    DshotDriver(uint8_t dshot_pin);
 
     /** Motor hardware init function */
     int init() override;
@@ -51,10 +51,10 @@ class DshotDriver : public BLDCDriver {
     void setPhaseState(PhaseState sa, PhaseState sb, PhaseState sc) override;
 
    private:
-    DShotRMT *motor;
+    DShotRMT *m_motor;
     const dshot_mode_e DSHOT_MODE = DSHOT300;
+    uint8_t phase_index = 0;
     uint8_t m_dshot_pin;    //!< DShot pin number
-    uint8_t m_rmt_channel;  //!< RMT channel number
     void sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3);
   };
 

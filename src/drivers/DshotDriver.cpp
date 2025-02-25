@@ -10,19 +10,25 @@ DshotDriver::DshotDriver(uint8_t dshot_pin, uint8_t rmt_channel) {
 }
 
 // enable motor driver
-void DshotDriver::enable() {
-    setPwm(0, 0, 0);
-}
+void DshotDriver::enable() { setPwm(0, 0, 0); }
 
 // disable motor driver
-void DshotDriver::disable() {
-    setPwm(0, 0, 0);
-}
+void DshotDriver::disable() { setPwm(0, 0, 0); }
 
 // init hardware pins
 int DshotDriver::init() {
-    motor = new DShotRMT(m_dshot_pin, m_rmt_channel);
-    motor->begin(DSHOT_MODE);
+    m_motor = new DShotRMT(m_dshot_pin, m_rmt_channel);
+    m_motor->begin(DSHOT_MODE);
+    long unsigned int now = micros();
+    long unsigned int last = millis();
+    while (true) {
+        if (micros() - last > 1000 / 300) {
+            motor->send_dshot_value(0);
+        }
+        if (millis() - now > 2000) {
+            break;
+        }
+    }
     return 1;
 }
 
@@ -49,8 +55,8 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
 }
 
 void DshotDriver::sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3) {
-    motor->sendThrottleValue(50 + command1);
-    motor->sendThrottleValue(50 + 664 + command2);
-    motor->sendThrottleValue(50 + 664 + 664 +command3);
+    m_motor->send_dshot_value(50 + command1);
+    m_motor->send_dshot_value(50 + 664 + command2);
+    m_motor->send_dshot_value(50 + 664 + 664 + command3);
     // Dshot command sending
 }
