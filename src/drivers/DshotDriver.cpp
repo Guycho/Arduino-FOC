@@ -28,6 +28,7 @@ int DshotDriver::init() {
             break;
         }
     }
+    initialized = 1;
     return 1;
 }
 
