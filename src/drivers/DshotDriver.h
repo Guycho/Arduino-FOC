@@ -1,6 +1,8 @@
 #ifndef DSHOTDRIVER_H
 #define DSHOTDRIVER_H
 
+#include <Ticker.h>
+
 #include "../common/base_classes/BLDCDriver.h"
 #include "../common/defaults.h"
 #include "../common/foc_utils.h"
@@ -49,6 +51,8 @@ class DshotDriver : public BLDCDriver {
     DShotRMT* m_motor;
     uint16_t phase_output[3];
     uint8_t phase_index = 0;
+    Ticker m_timer;
+
     static void sendDshotCommandStatic();
     void sendDshotCommand();
 };
