@@ -54,7 +54,7 @@ class DshotDriver : public BLDCDriver {
     uint16_t phase_output[3];
     uint8_t phase_index = 0;
     Ticker m_timer;
-
+    const dshot_mode_e DSHOT_MODE = DSHOT300;
     static std::map<int, DshotDriver*> instances;
     static int instance_counter;
     int instance_id;
@@ -63,4 +63,4 @@ class DshotDriver : public BLDCDriver {
     void sendDshotCommand();
 };
 
-#endif // DSHOTDRIVER_H
+#endif
