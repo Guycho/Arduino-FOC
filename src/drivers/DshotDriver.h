@@ -1,7 +1,7 @@
 #ifndef DSHOTDRIVER_H
 #define DSHOTDRIVER_H
 
-#include <Ticker.h>
+#include <Chrono.h>
 
 #include <map>
 
@@ -47,19 +47,16 @@ class DshotDriver : public BLDCDriver {
      * @param sc - phase C state : active / disabled ( high impedance )
      */
     void setPhaseState(PhaseState sa, PhaseState sb, PhaseState sc) override;
+    void run();
 
    private:
     uint8_t m_dshot_pin;
     DShotRMT* m_motor;
     uint16_t phase_output[3];
     uint8_t phase_index = 0;
-    Ticker m_timer;
+    Chrono *m_timer;
     const dshot_mode_e DSHOT_MODE = DSHOT300;
-    static std::map<int, DshotDriver*> instances;
-    static int instance_counter;
-    int instance_id;
 
-    static void sendDshotCommandStatic(int instance_id);
     void sendDshotCommand();
 };
 

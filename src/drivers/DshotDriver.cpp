@@ -34,7 +34,8 @@ int DshotDriver::init() {
             break;
         }
     }
-    m_timer.attach_us(1000 / 300, std::bind(&DshotDriver::sendDshotCommandStatic, instance_id));
+    m_timer = new Chrono(CHRONO::MICROS);
+    m_timer->start();
     initialized = 1;
     return 1;
 }
@@ -57,16 +58,15 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
     phase_output[2] = static_cast<uint16_t>(Uc / voltage_power_supply * 1000);
 }
 
-// Static function to send DShot command
-void DshotDriver::sendDshotCommandStatic(int instance_id) {
-    // Call the non-static member function
-    if (instances.find(instance_id) != instances.end()) {
-        instances[instance_id]->sendDshotCommand();
-    }
-}
 
-// Non-static function to send DShot command
 void DshotDriver::sendDshotCommand() {
     m_motor->send_dshot_value(phase_output[phase_index]);
     phase_index = (phase_index + 1) % 3;
+}
+
+void run(){
+    // run the motor
+    if (m_timer->hasPassed(1000 / 300), true) {
+        sendDshotCommand();
+    }
 }
