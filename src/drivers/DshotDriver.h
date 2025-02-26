@@ -7,7 +7,6 @@
 #include "../common/time_utils.h"
 #include "DShotRMT.h"
 #include "hardware_api.h"
-#include <Ticker.h>
 
 /**
  * DShot BLDC driver class
@@ -16,12 +15,7 @@ class DshotDriver : public BLDCDriver {
    public:
     /**
      * DshotDriver class constructor
-     * @param phA A phase pin
-     * @param phB B phase pin
-     * @param phC C phase pin
-     * @param en1 enable pin (optional input)
-     * @param en2 enable pin (optional input)
-     * @param en3 enable pin (optional input)
+     * @param dshot_pin DShot pin
      */
     DshotDriver(uint8_t dshot_pin);
 
@@ -32,7 +26,6 @@ class DshotDriver : public BLDCDriver {
     /** Motor enable function */
     void enable() override;
 
-    // hardware variables
     /**
      * Set phase voltages to the hardware using DShot protocol
      *
@@ -52,13 +45,12 @@ class DshotDriver : public BLDCDriver {
     void setPhaseState(PhaseState sa, PhaseState sb, PhaseState sc) override;
 
    private:
-    DShotRMT *m_motor;
-    Ticker m_timer;
+    uint8_t m_dshot_pin;
+    DShotRMT* m_motor;
+    uint16_t phase_output[3];
     uint8_t phase_index = 0;
-    uint16_t phase_output[3] = {0, 0, 0}; 
-    const dshot_mode_e DSHOT_MODE = DSHOT300;
-    uint8_t m_dshot_pin;    //!< DShot pin number
+    static void sendDshotCommandStatic();
     void sendDshotCommand();
-  };
+};
 
 #endif

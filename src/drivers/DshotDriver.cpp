@@ -28,41 +28,39 @@ int DshotDriver::init() {
             break;
         }
     }
-    m_timer.attach_us(1000 / 300, this->sendDshotCommand); 
+    m_timer.attach_us(1000 / 300, DshotDriver::sendDshotCommandStatic);
     initialized = 1;
     return 1;
 }
 
-// Set voltage to the pwm pin
+// Set phase states to the hardware
 void DshotDriver::setPhaseState(PhaseState sa, PhaseState sb, PhaseState sc) {
     // disable if needed
 }
 
-// Set voltage to the pwm pin
+// Set phase voltages to the hardware using DShot protocol
 void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
     // limit the voltage in driver
     Ua = _constrain(Ua, 0.0f, voltage_limit);
     Ub = _constrain(Ub, 0.0f, voltage_limit);
     Uc = _constrain(Uc, 0.0f, voltage_limit);
-    // calculate duty cycle
-    // limited in [0,1]
-    dc_a = _constrain(Ua / voltage_power_supply, 0.0f, 1.0f);
-    dc_b = _constrain(Ub / voltage_power_supply, 0.0f, 1.0f);
-    dc_c = _constrain(Uc / voltage_power_supply, 0.0f, 1.0f);
 
-    uint16_t scaled_dc_a = dc_a * 663;
-    uint16_t scaled_dc_b = dc_b * 663;
-    uint16_t scaled_dc_c = dc_c * 663;
-    phase_output[0] = 50 + scaled_dc_a;
-    phase_output[1] = 50 + 664 + scaled_dc_b;
-    phase_output[2] = 50 + 664 + 664 + scaled_dc_c;
+    // Convert voltages to DShot values
+    phase_output[0] = static_cast<uint16_t>(Ua / voltage_power_supply * 1000);
+    phase_output[1] = static_cast<uint16_t>(Ub / voltage_power_supply * 1000);
+    phase_output[2] = static_cast<uint16_t>(Uc / voltage_power_supply * 1000);
 }
 
+// Static function to send DShot command
+void DshotDriver::sendDshotCommandStatic() {
+    // Call the non-static member function
+    // Assuming you have a global instance of DshotDriver
+    // Replace `globalDshotDriverInstance` with the actual instance name
+    globalDshotDriverInstance->sendDshotCommand();
+}
+
+// Non-static function to send DShot command
 void DshotDriver::sendDshotCommand() {
     m_motor->send_dshot_value(phase_output[phase_index]);
-    phase_index++;
-    if (phase_index > 2) {
-        phase_index = 0;
-    }
-    // Dshot command sending
+    phase_index = (phase_index + 1) % 3;
 }
