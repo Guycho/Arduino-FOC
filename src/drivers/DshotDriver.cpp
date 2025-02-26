@@ -1,11 +1,17 @@
 #include "DshotDriver.h"
 
+std::map<int, DshotDriver*> DshotDriver::instances;
+int DshotDriver::instance_counter = 0;
+
 DshotDriver::DshotDriver(uint8_t dshot_pin) {
     m_dshot_pin = dshot_pin;
     // default power-supply value
     voltage_power_supply = DEF_POWER_SUPPLY;
     voltage_limit = NOT_SET;
     pwm_frequency = NOT_SET;
+
+    instance_id = instance_counter++;
+    instances[instance_id] = this;
 }
 
 // enable motor driver
@@ -28,7 +34,7 @@ int DshotDriver::init() {
             break;
         }
     }
-    m_timer.attach_us(1000 / 300, DshotDriver::sendDshotCommandStatic);
+    m_timer.attach_us(1000 / 300, std::bind(&DshotDriver::sendDshotCommandStatic, instance_id));
     initialized = 1;
     return 1;
 }
@@ -52,11 +58,11 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
 }
 
 // Static function to send DShot command
-void DshotDriver::sendDshotCommandStatic() {
+void DshotDriver::sendDshotCommandStatic(int instance_id) {
     // Call the non-static member function
-    // Assuming you have a global instance of DshotDriver
-    // Replace `globalDshotDriverInstance` with the actual instance name
-    globalDshotDriverInstance->sendDshotCommand();
+    if (instances.find(instance_id) != instances.end()) {
+        instances[instance_id]->sendDshotCommand();
+    }
 }
 
 // Non-static function to send DShot command
