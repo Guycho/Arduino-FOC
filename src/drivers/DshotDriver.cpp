@@ -1,8 +1,5 @@
 #include "DshotDriver.h"
 
-std::map<int, DshotDriver*> DshotDriver::instances;
-int DshotDriver::instance_counter = 0;
-
 DshotDriver::DshotDriver(uint8_t dshot_pin) {
     m_dshot_pin = dshot_pin;
     // default power-supply value
