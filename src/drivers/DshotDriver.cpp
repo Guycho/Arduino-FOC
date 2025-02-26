@@ -28,7 +28,7 @@ int DshotDriver::init() {
             break;
         }
     }
-    m_timer.attach_us(1000 / 300, sendDshotCommand); 
+    m_timer.attach_us(1000 / 300, this->sendDshotCommand); 
     initialized = 1;
     return 1;
 }
