@@ -28,6 +28,7 @@ int DshotDriver::init() {
             break;
         }
     }
+    m_timer.attach_us(1000 / 300, sendDshotCommand); 
     initialized = 1;
     return 1;
 }
@@ -52,11 +53,16 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
     uint16_t scaled_dc_a = dc_a * 663;
     uint16_t scaled_dc_b = dc_b * 663;
     uint16_t scaled_dc_c = dc_c * 663;
+    phase_output[0] = 50 + scaled_dc_a;
+    phase_output[1] = 50 + 664 + scaled_dc_b;
+    phase_output[2] = 50 + 664 + 664 + scaled_dc_c;
 }
 
-void DshotDriver::sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3) {
-    m_motor->send_dshot_value(50 + command1);
-    m_motor->send_dshot_value(50 + 664 + command2);
-    m_motor->send_dshot_value(50 + 664 + 664 + command3);
+void DshotDriver::sendDshotCommand() {
+    m_motor->send_dshot_value(phase_output[phase_index]);
+    phase_index++;
+    if (phase_index > 2) {
+        phase_index = 0;
+    }
     // Dshot command sending
 }

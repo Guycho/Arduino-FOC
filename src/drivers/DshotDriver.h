@@ -7,6 +7,7 @@
 #include "../common/time_utils.h"
 #include "DShotRMT.h"
 #include "hardware_api.h"
+#include <Ticker.h>
 
 /**
  * DShot BLDC driver class
@@ -52,10 +53,12 @@ class DshotDriver : public BLDCDriver {
 
    private:
     DShotRMT *m_motor;
-    const dshot_mode_e DSHOT_MODE = DSHOT300;
+    Ticker m_timer;
     uint8_t phase_index = 0;
+    uint16_t phase_output[3] = {0, 0, 0}; 
+    const dshot_mode_e DSHOT_MODE = DSHOT300;
     uint8_t m_dshot_pin;    //!< DShot pin number
-    void sendDshotCommand(uint16_t command1, uint16_t command2, uint16_t command3);
+    void sendDshotCommand();
   };
 
 #endif
