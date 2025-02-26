@@ -9,9 +9,6 @@ DshotDriver::DshotDriver(uint8_t dshot_pin) {
     voltage_power_supply = DEF_POWER_SUPPLY;
     voltage_limit = NOT_SET;
     pwm_frequency = NOT_SET;
-
-    instance_id = instance_counter++;
-    instances[instance_id] = this;
 }
 
 // enable motor driver
@@ -34,8 +31,7 @@ int DshotDriver::init() {
             break;
         }
     }
-    m_timer = new Chrono(CHRONO::MICROS);
-    m_timer->start();
+    m_timer = new Chrono(Chrono::MICROS, true);
     initialized = 1;
     return 1;
 }
@@ -64,7 +60,7 @@ void DshotDriver::sendDshotCommand() {
     phase_index = (phase_index + 1) % 3;
 }
 
-void run(){
+void DshotDriver::run() {
     // run the motor
     if (m_timer->hasPassed(1000 / 300), true) {
         sendDshotCommand();
