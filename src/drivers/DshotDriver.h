@@ -50,6 +50,7 @@ class DshotDriver : public BLDCDriver {
     uint8_t m_dshot_pin;
     DShotRMT* m_motor;
     uint16_t phase_output[3];
+    const dshot_mode_e DSHOT_MODE = DSHOT300;
     uint8_t phase_index = 0;
     Ticker m_timer;
 
