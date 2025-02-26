@@ -44,13 +44,19 @@ void DshotDriver::setPwm(float Ua, float Ub, float Uc) {
     Ua = _constrain(Ua, 0.0f, voltage_limit);
     Ub = _constrain(Ub, 0.0f, voltage_limit);
     Uc = _constrain(Uc, 0.0f, voltage_limit);
+    // calculate duty cycle
+    // limited in [0,1]
+    dc_a = _constrain(Ua / voltage_power_supply, 0.0f, 1.0f);
+    dc_b = _constrain(Ub / voltage_power_supply, 0.0f, 1.0f);
+    dc_c = _constrain(Uc / voltage_power_supply, 0.0f, 1.0f);
 
-    // Convert voltages to DShot values
-    phase_output[0] = static_cast<uint16_t>(Ua / voltage_power_supply * 1000);
-    phase_output[1] = static_cast<uint16_t>(Ub / voltage_power_supply * 1000);
-    phase_output[2] = static_cast<uint16_t>(Uc / voltage_power_supply * 1000);
+    uint16_t scaled_dc_a = dc_a * 663;
+    uint16_t scaled_dc_b = dc_b * 663;
+    uint16_t scaled_dc_c = dc_c * 663;
+    phase_output[0] = 50 + scaled_dc_a;
+    phase_output[1] = 50 + 664 + scaled_dc_b;
+    phase_output[2] = 50 + 664 + 664 + scaled_dc_c;
 }
-
 
 void DshotDriver::sendDshotCommand() {
     m_motor->send_dshot_value(phase_output[phase_index]);
